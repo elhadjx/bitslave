@@ -1,0 +1,95 @@
+import { Router, Request, Response } from 'express';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { User } from '../models/User';
+import { AgentConfig } from '../models/AgentConfig';
+import { BillingService } from '../billing/polar';
+
+export const authRouter = Router();
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+
+authRouter.post('/register', async (req: Request, res: Response) => {
+  try {
+    const { email, password, telegramToken, llmProvider, llmApiKey } = req.body;
+
+    if (!email || !password || !telegramToken || !llmProvider || !llmApiKey) {
+      return res.status(400).json({ error: 'Missing required registration fields' });
+    }
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ error: 'User already exists' });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const passwordHash = await bcrypt.hash(password, salt);
+
+    const user = new User({ email, passwordHash, paymentStatus: 'pending' });
+    await user.save();
+
+    const config = new AgentConfig({
+      userId: user._id,
+      telegramToken,
+      llmProvider,
+      llmApiKey,
+      isDeployed: false,
+      skills: {
+        emailProcessing: true,
+        scheduleManagement: true,
+        dataAnalysis: false,
+        reportGeneration: true,
+        taskAutomation: true,
+        customerSupport: false,
+      }
+    });
+    await config.save();
+
+    // Create Polar checkout session to finalize registration
+    const productId = process.env.POLAR_SUBSCRIPTION_PRODUCT_ID || 'dummy-product-id';
+    const successUrl = `http://localhost:3000/dashboard?session_id={CHECKOUT_SESSION_ID}`;
+    const checkoutUrl = await BillingService.createCheckoutSession(user._id.toString(), productId, successUrl);
+
+    // Sign a token so the user is virtually "logged in" on the frontend before redirect.
+    const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '7d' });
+
+    // After success on polar.sh, the frontend completes the registration flow.
+    res.json({ 
+      checkoutUrl, 
+      token, 
+      user: { email: user.email, paymentStatus: user.paymentStatus }
+    });
+  } catch (error) {
+    console.error('Registration error:', error);
+    res.status(500).json({ error: 'Internal server error during registration' });
+  }
+});
+
+authRouter.post('/login', async (req: Request, res: Response) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ error: 'Invalid credentials' });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.passwordHash);
+    if (!isMatch) {
+      return res.status(400).json({ error: 'Invalid credentials' });
+    }
+
+    /*
+    // Optional: Protect access for unpaid users at login
+    if (user.paymentStatus !== 'paid') {
+       return res.status(403).json({ error: 'Payment required to access dashboard' });
+    }
+    */
+
+    const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '7d' });
+
+    res.json({ token, user: { email: user.email, paymentStatus: user.paymentStatus } });
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ error: 'Internal server error during login' });
+  }
+});
