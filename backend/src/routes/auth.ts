@@ -46,7 +46,7 @@ authRouter.post('/register', async (req: Request, res: Response) => {
 
     // Create Polar checkout session to finalize registration
     const productId = process.env.POLAR_SUBSCRIPTION_PRODUCT_ID || 'dummy-product-id';
-    const successUrl = `http://localhost:3000/dashboard?session_id={CHECKOUT_SESSION_ID}`;
+    const successUrl = `${process.env.FRONTEND_URL || `http://localhost:3000`}/dashboard?session_id={CHECKOUT_SESSION_ID}`;
     const checkoutUrl = await BillingService.createCheckoutSession(user._id.toString(), productId, successUrl);
 
     // Sign a token so the user is virtually "logged in" on the frontend before redirect.
