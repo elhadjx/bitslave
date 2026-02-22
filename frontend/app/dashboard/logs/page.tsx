@@ -13,7 +13,8 @@ export default function LogsPage() {
     const fetchLogs = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await fetch('http://localhost:3001/api/logs', {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+        const res = await fetch(`${apiUrl}/logs`, {
           headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) }
         })
         const data = await res.json()

@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 
-const API_BASE = 'http://localhost:3001/api';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
 
 export function useBitslave() {
   const [isDeploying, setIsDeploying] = useState(false);

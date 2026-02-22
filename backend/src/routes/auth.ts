@@ -5,8 +5,10 @@ import { User } from '../models/User';
 import { AgentConfig } from '../models/AgentConfig';
 import { BillingService } from '../billing/polar';
 
+import { config as appConfig } from '../config';
+
 export const authRouter = Router();
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+const JWT_SECRET = appConfig.jwtSecret;
 
 authRouter.post('/register', async (req: Request, res: Response) => {
   try {
@@ -45,8 +47,8 @@ authRouter.post('/register', async (req: Request, res: Response) => {
     await config.save();
 
     // Create Polar checkout session to finalize registration
-    const productId = process.env.POLAR_SUBSCRIPTION_PRODUCT_ID || 'dummy-product-id';
-    const successUrl = `${process.env.FRONTEND_URL || `http://localhost:3000`}/dashboard?session_id={CHECKOUT_SESSION_ID}`;
+    const productId = appConfig.polarSubscriptionProductId;
+    const successUrl = `${appConfig.frontendUrl}/dashboard?session_id={CHECKOUT_SESSION_ID}`;
     const checkoutUrl = await BillingService.createCheckoutSession(user._id.toString(), productId, successUrl);
 
     // Sign a token so the user is virtually "logged in" on the frontend before redirect.

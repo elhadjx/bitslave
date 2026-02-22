@@ -19,7 +19,8 @@ export default function SkillsPage() {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    fetch('http://localhost:3001/api/skills', {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+    fetch(`${apiUrl}/skills`, {
       headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) }
     })
       .then(res => res.json())
@@ -43,7 +44,8 @@ export default function SkillsPage() {
 
     try {
       const token = localStorage.getItem('token');
-      await fetch('http://localhost:3001/api/skills', {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+      await fetch(`${apiUrl}/skills`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',

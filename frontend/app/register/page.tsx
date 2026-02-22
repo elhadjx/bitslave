@@ -47,7 +47,8 @@ export default function RegisterPage() {
     }
 
     try {
-      const res = await fetch('http://localhost:3001/api/auth/register', {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+      const res = await fetch(`${apiUrl}/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password, telegramToken, llmProvider, llmApiKey })

@@ -1,13 +1,14 @@
 import { Bot } from 'grammy';
+import { config } from '../config';
 // Note: This script is intended to be run inside the deployed Docker container.
 // It receives configuration via environment variables provided by the orchestrator.
 
 console.log('Starting standalone bot instance...');
 
-const token = process.env.TELEGRAM_TOKEN;
-const provider = process.env.LLM_PROVIDER;
-const apiKey = process.env.LLM_API_KEY;
-const skills = JSON.parse(process.env.SKILLS || '{}');
+const token = config.telegramToken;
+const provider = config.llmProvider;
+const apiKey = config.llmApiKey;
+const skills = config.skills;
 
 if (!token) {
   console.error('TELEGRAM_TOKEN is required. Exiting.');
