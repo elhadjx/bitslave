@@ -39,9 +39,8 @@ export function HeroSection() {
 
           {/* Subheading */}
           <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto">
-            Enslave an autonomous Openclaw AI agent to do your bidding 24/7.
-            Just plug in your keys and we'll put it to work while you touch
-            grass.
+            Deploy and manage Openclaw AI agents to do your bidding 24/7. Just
+            plug in your keys and we'll put it to work while you touch grass.
           </p>
 
           {/* CTA Buttons */}

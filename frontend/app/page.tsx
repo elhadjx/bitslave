@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { HeroSection } from "@/components/landing/hero-section";
 import { FeatureGrid } from "@/components/landing/feature-grid";
 import { PricingSection } from "@/components/landing/pricing-section";
@@ -92,6 +93,14 @@ export default function LandingPage() {
                   >
                     Terms
                   </a>
+                </li>
+                <li>
+                  <Link
+                    href="/acceptable-use"
+                    className="hover:text-foreground transition-colors"
+                  >
+                    Acceptable Use
+                  </Link>
                 </li>
                 <li>
                   <a

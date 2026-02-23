@@ -1,87 +1,106 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import { Loader2, ArrowRight, Bot, Key, CreditCard } from 'lucide-react'
-import { useAuth } from '@/hooks/useAuth'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { GlassCard } from '@/components/dashboard/glass-card'
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Loader2, ArrowRight, Bot, Key, CreditCard } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { GlassCard } from "@/components/dashboard/glass-card";
 
 export default function RegisterPage() {
-  const [step, setStep] = useState(1)
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  
-  const [telegramToken, setTelegramToken] = useState('')
-  const [llmProvider, setLlmProvider] = useState('openai')
-  const [llmApiKey, setLlmApiKey] = useState('')
-  
-  const [error, setError] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  
-  const { login } = useAuth()
-  const router = useRouter()
+  const [step, setStep] = useState(1);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [acceptedTos, setAcceptedTos] = useState(false);
+
+  const [telegramToken, setTelegramToken] = useState("");
+  const [llmProvider, setLlmProvider] = useState("openai");
+  const [llmApiKey, setLlmApiKey] = useState("");
+
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { login } = useAuth();
+  const router = useRouter();
 
   const handleNext = (e: React.FormEvent) => {
-    e.preventDefault()
-    setError('')
-    if (step === 1 && (!email || !password)) {
-      setError('Email and password are required.')
-      return
+    e.preventDefault();
+    setError("");
+    if (step === 1) {
+      if (!email || !password) {
+        setError("Email and password are required.");
+        return;
+      }
+      if (!acceptedTos) {
+        setError("You must accept the Terms of Service to continue.");
+        return;
+      }
     }
-    setStep(step + 1)
-  }
+    setStep(step + 1);
+  };
 
   const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError('')
-    setIsLoading(true)
+    e.preventDefault();
+    setError("");
+    setIsLoading(true);
 
     if (!telegramToken || !llmApiKey) {
-      setError('Deployment configuration is required.')
-      setIsLoading(false)
-      return
+      setError("Deployment configuration is required.");
+      setIsLoading(false);
+      return;
     }
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+      const apiUrl =
+        process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
       const res = await fetch(`${apiUrl}/auth/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, telegramToken, llmProvider, llmApiKey })
-      })
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          password,
+          telegramToken,
+          llmProvider,
+          llmApiKey,
+        }),
+      });
 
-      const data = await res.json()
+      const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.error || 'Registration failed')
+        throw new Error(data.error || "Registration failed");
       }
 
       // Log in the user locally
-      login(data.token, data.user)
-      
+      login(data.token, data.user);
+
       // Redirect to Polar checkout
       if (data.checkoutUrl) {
-        window.location.href = data.checkoutUrl
+        window.location.href = data.checkoutUrl;
       } else {
-        router.push('/dashboard')
+        router.push("/dashboard");
       }
     } catch (err: any) {
-      setError(err.message)
-      setIsLoading(false)
-      setStep(1) // Return to first step to display the error
+      setError(err.message);
+      setIsLoading(false);
+      setStep(1); // Return to first step to display the error
     }
-  }
+  };
 
   return (
     <div className="flex min-h-screen items-center justify-center p-4">
       <GlassCard className="w-full max-w-lg p-8">
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold tracking-tight mb-2">Create Account</h1>
-          <p className="text-sm text-muted-foreground">Join Bitslave and deploy your agent</p>
+          <h1 className="text-2xl font-bold tracking-tight mb-2">
+            Create Account
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            Join Bitslave and deploy your agent
+          </p>
         </div>
 
         {/* Progress Steps */}
@@ -91,10 +110,13 @@ export default function RegisterPage() {
             <div
               key={num}
               className={`flex h-10 w-10 items-center justify-center rounded-full border-2 bg-background font-semibold transition-colors
-                ${step === num ? 'border-accent text-accent' : 
-                  step > num ? 'border-foreground text-foreground bg-foreground/10' : 
-                  'border-muted text-muted-foreground'}`
-              }
+                ${
+                  step === num
+                    ? "border-accent text-accent"
+                    : step > num
+                      ? "border-foreground text-foreground bg-foreground/10"
+                      : "border-muted text-muted-foreground"
+                }`}
             >
               {num === 1 && <Key className="w-4 h-4" />}
               {num === 2 && <Bot className="w-4 h-4" />}
@@ -134,6 +156,26 @@ export default function RegisterPage() {
                 className="bg-input/50"
               />
             </div>
+            <div className="flex items-center space-x-2 pt-2">
+              <Checkbox
+                id="terms"
+                checked={acceptedTos}
+                onCheckedChange={(checked) => setAcceptedTos(checked === true)}
+              />
+              <Label
+                htmlFor="terms"
+                className="text-sm font-normal text-muted-foreground"
+              >
+                I accept the{" "}
+                <Link
+                  href="/acceptable-use"
+                  target="_blank"
+                  className="text-foreground hover:text-accent hover:underline"
+                >
+                  Terms of Service
+                </Link>
+              </Label>
+            </div>
             <Button type="submit" className="w-full h-11">
               Continue <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
@@ -142,7 +184,13 @@ export default function RegisterPage() {
 
         {/* Step 2: Configuration */}
         {step === 2 && (
-          <form onSubmit={(e) => { e.preventDefault(); setStep(3); }} className="space-y-6">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              setStep(3);
+            }}
+            className="space-y-6"
+          >
             <div className="space-y-2">
               <Label htmlFor="telegramToken">Telegram Bot Token</Label>
               <Input
@@ -182,9 +230,14 @@ export default function RegisterPage() {
                 className="bg-input/50"
               />
             </div>
-            
+
             <div className="flex gap-4">
-              <Button type="button" variant="outline" className="flex-1" onClick={() => setStep(1)}>
+              <Button
+                type="button"
+                variant="outline"
+                className="flex-1"
+                onClick={() => setStep(1)}
+              >
                 Back
               </Button>
               <Button type="submit" className="flex-1">
@@ -203,19 +256,29 @@ export default function RegisterPage() {
               </div>
               <h3 className="text-xl font-semibold">Complete Registration</h3>
               <p className="text-muted-foreground text-sm">
-                To launch your bot, you'll be redirected to Polar.sh to activate your subscription plan.
+                To launch your bot, you'll be redirected to Polar.sh to activate
+                your subscription plan.
               </p>
             </div>
 
             <div className="flex gap-4">
-              <Button type="button" variant="outline" className="flex-1" onClick={() => setStep(2)} disabled={isLoading}>
+              <Button
+                type="button"
+                variant="outline"
+                className="flex-1"
+                onClick={() => setStep(2)}
+                disabled={isLoading}
+              >
                 Back
               </Button>
               <Button type="submit" className="flex-1" disabled={isLoading}>
                 {isLoading ? (
-                  <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Processing...</>
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />{" "}
+                    Processing...
+                  </>
                 ) : (
-                  'Proceed to Payment'
+                  "Proceed to Payment"
                 )}
               </Button>
             </div>
@@ -224,13 +287,16 @@ export default function RegisterPage() {
 
         {step === 1 && (
           <div className="mt-6 text-center text-sm text-muted-foreground">
-            Already have an account?{' '}
-            <Link href="/login" className="text-accent flex-inline hover:underline ml-1">
+            Already have an account?{" "}
+            <Link
+              href="/login"
+              className="text-accent flex-inline hover:underline ml-1"
+            >
               Sign In
             </Link>
           </div>
         )}
       </GlassCard>
     </div>
-  )
+  );
 }
