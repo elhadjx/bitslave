@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <!-- Definitions for gradients and shadows -->
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    
+    <!-- Accent Gradient (The "Claw" and "Circuit" energy) -->
+    <linearGradient id="accentGradient" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#3B82F6" /> <!-- Blue -->
+      <stop offset="50%" stop-color="#8B5CF6" /> <!-- Purple -->
+      <stop offset="100%" stop-color="#EC4899" /> <!-- Pink -->
+    </linearGradient>
+    
+    <!-- Glow Effect -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <!-- Subtle Drop Shadow -->
+    <filter id="dropShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Base dark rounded background -->
+  <rect width="400" height="400" rx="90" fill="url(#bgGradient)" filter="url(#dropShadow)" />
+  
+  <!-- Outer glowing energy ring / collar -->
+  <circle cx="200" cy="200" r="140" fill="none" stroke="url(#accentGradient)" stroke-width="4" stroke-dasharray="10 15" opacity="0.3" filter="url(#glow)"/>
+  <circle cx="200" cy="200" r="160" fill="none" stroke="#8B5CF6" stroke-width="1" opacity="0.2" />
+
+  <!-- The "Claw" / Neural Interface holding the core -->
+  <g transform="translate(200, 200) scale(1.1) translate(-200, -200)">
+    <!-- Central Core (The Brain/Node) -->
+    <circle cx="200" cy="200" r="35" fill="none" stroke="url(#accentGradient)" stroke-width="12" filter="url(#glow)"/>
+    <circle cx="200" cy="200" r="15" fill="#EC4899" filter="url(#glow)"/>
+    
+    <!-- Top Claw / Neural constraint -->
+    <path d="M 170 140 Q 200 110 230 140 L 250 120 Q 200 70 150 120 Z" fill="url(#accentGradient)" filter="url(#dropShadow)"/>
+    
+    <!-- Bottom Left Claw -->
+    <path d="M 140 230 Q 110 200 140 170 L 120 150 Q 70 200 120 250 Z" fill="url(#accentGradient)" filter="url(#dropShadow)"/>
+    
+    <!-- Bottom Right Claw -->
+    <path d="M 260 230 Q 290 200 260 170 L 280 150 Q 330 200 280 250 Z" fill="url(#accentGradient)" filter="url(#dropShadow)"/>
+    
+    <!-- Connecting neural lines/circuits from the claws to the core -->
+    <path d="M 200 135 L 200 160" stroke="#8B5CF6" stroke-width="4" stroke-linecap="round"/>
+    <path d="M 145 200 L 160 215" stroke="#3B82F6" stroke-width="4" stroke-linecap="round"/>
+    <path d="M 255 200 L 240 215" stroke="#EC4899" stroke-width="4" stroke-linecap="round"/>
+  </g>
+
+  <!-- Digital / Binary Data Particles (The Bits) -->
+  <g fill="#FFFFFF" opacity="0.6">
+    <rect x="120" y="100" width="8" height="8" rx="2" />
+    <rect x="280" y="110" width="8" height="8" rx="2" />
+    <rect x="100" y="270" width="8" height="8" rx="2" />
+    <rect x="270" y="290" width="8" height="8" rx="2" />
+    <rect x="210" y="320" width="8" height="8" rx="2" />
+    <circle cx="150" cy="300" r="3" />
+    <circle cx="250" cy="90" r="3" />
+    <circle cx="320" cy="200" r="4" />
+    <circle cx="80" cy="180" r="4" />
+  </g>
+</svg>

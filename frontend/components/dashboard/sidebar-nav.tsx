@@ -46,8 +46,8 @@ export function SidebarNav() {
       {/* Logo */}
       <div className="p-6 border-b" style={{ borderColor: 'var(--glass-border)' }}>
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-accent to-muted flex items-center justify-center">
-            <span className="text-accent-foreground font-bold text-sm">OC</span>
+          <div className="w-8 h-8 flex items-center justify-center">
+            <img src="/logo.svg" alt="Bitslave Logo" className="w-full h-full object-contain" />
           </div>
           <span className="font-semibold text-foreground">Bitslave</span>
         </div>
