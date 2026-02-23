@@ -31,7 +31,7 @@ export function PricingSection() {
             Simple, Transparent Pricing
           </h2>
           <p className="text-muted-foreground text-lg">
-            Start free, scale as you grow. No hidden fees.
+            Start Now, scale as you grow. No hidden fees.
           </p>
         </div>
 
@@ -51,7 +51,7 @@ export function PricingSection() {
               <div className="space-y-3">
                 <h3 className="text-2xl font-bold text-foreground">Pro Plan</h3>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-5xl font-bold text-accent">$19</span>
+                  <span className="text-5xl font-bold text-accent">$29.99</span>
                   <span className="text-muted-foreground">/month</span>
                 </div>
                 <p className="text-sm text-muted-foreground">
