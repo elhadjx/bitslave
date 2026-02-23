@@ -17,9 +17,9 @@ export function HeroSection() {
           {/* Tagline */}
           <div className="inline-block">
             <div className="px-4 py-2 rounded-full border backdrop-blur-xl" style={{ borderColor: 'var(--glass-border)', backgroundColor: 'var(--glass-bg)' }}>
-              <p className="text-sm font-medium text-muted-foreground">
-                Deploy your Openclaw Agent in 60 seconds with Bitslave
-              </p>
+              <h2 className="text-sm font-medium text-muted-foreground m-0">
+                Host and Deploy your Openclaw Agent in 60 seconds online
+              </h2>
             </div>
           </div>
 

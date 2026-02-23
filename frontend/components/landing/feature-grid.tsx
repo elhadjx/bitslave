@@ -32,7 +32,7 @@ export function FeatureGrid() {
             From Token to <span className="bg-gradient-to-r from-[oklch(0.70_0.25_142.5)] to-[oklch(0.75_0.22_252)] bg-clip-text text-transparent">Live in Minutes</span>
           </h2>
           <p className="text-muted-foreground text-lg">
-            Three simple steps to deploy your autonomous Openclaw agent on Bitslave.
+            Deploy your Openclaw autonomous agent online in three simple steps.
           </p>
         </div>
 
