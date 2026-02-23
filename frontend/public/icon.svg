@@ -1,26 +1,69 @@
-<svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <style>
-    @media (prefers-color-scheme: light) {
-      .background { fill: black; }
-      .foreground { fill: white; }
-    }
-    @media (prefers-color-scheme: dark) {
-      .background { fill: white; }
-      .foreground { fill: black; }
-    }
-  </style>
-  <g clip-path="url(#clip0_7960_43945)">
-    <rect class="background" width="180" height="180" rx="37" />
-    <g style="transform: scale(95%); transform-origin: center">
-      <path class="foreground"
-        d="M101.141 53H136.632C151.023 53 162.689 64.6662 162.689 79.0573V112.904H148.112V79.0573C148.112 78.7105 148.098 78.3662 148.072 78.0251L112.581 112.898C112.701 112.902 112.821 112.904 112.941 112.904H148.112V126.672H112.941C98.5504 126.672 86.5638 114.891 86.5638 100.5V66.7434H101.141V100.5C101.141 101.15 101.191 101.792 101.289 102.422L137.56 66.7816C137.255 66.7563 136.945 66.7434 136.632 66.7434H101.141V53Z" />
-      <path class="foreground"
-        d="M65.2926 124.136L14 66.7372H34.6355L64.7495 100.436V66.7372H80.1365V118.47C80.1365 126.278 70.4953 129.958 65.2926 124.136Z" />
-    </g>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <!-- Definitions for gradients and shadows -->
   <defs>
-    <clipPath id="clip0_7960_43945">
-      <rect width="180" height="180" fill="white" />
-    </clipPath>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    
+    <!-- Accent Gradient (The "Claw" and "Circuit" energy) -->
+    <linearGradient id="accentGradient" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#3B82F6" /> <!-- Blue -->
+      <stop offset="50%" stop-color="#8B5CF6" /> <!-- Purple -->
+      <stop offset="100%" stop-color="#EC4899" /> <!-- Pink -->
+    </linearGradient>
+    
+    <!-- Glow Effect -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <!-- Subtle Drop Shadow -->
+    <filter id="dropShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
   </defs>
+
+  <!-- Base dark rounded background -->
+  <rect width="400" height="400" rx="90" fill="url(#bgGradient)" filter="url(#dropShadow)" />
+  
+  <!-- Outer glowing energy ring / collar -->
+  <circle cx="200" cy="200" r="140" fill="none" stroke="url(#accentGradient)" stroke-width="4" stroke-dasharray="10 15" opacity="0.3" filter="url(#glow)"/>
+  <circle cx="200" cy="200" r="160" fill="none" stroke="#8B5CF6" stroke-width="1" opacity="0.2" />
+
+  <!-- The "Claw" / Neural Interface holding the core -->
+  <g transform="translate(200, 200) scale(1.1) translate(-200, -200)">
+    <!-- Central Core (The Brain/Node) -->
+    <circle cx="200" cy="200" r="35" fill="none" stroke="url(#accentGradient)" stroke-width="12" filter="url(#glow)"/>
+    <circle cx="200" cy="200" r="15" fill="#EC4899" filter="url(#glow)"/>
+    
+    <!-- Top Claw / Neural constraint -->
+    <path d="M 170 140 Q 200 110 230 140 L 250 120 Q 200 70 150 120 Z" fill="url(#accentGradient)" filter="url(#dropShadow)"/>
+    
+    <!-- Bottom Left Claw -->
+    <path d="M 140 230 Q 110 200 140 170 L 120 150 Q 70 200 120 250 Z" fill="url(#accentGradient)" filter="url(#dropShadow)"/>
+    
+    <!-- Bottom Right Claw -->
+    <path d="M 260 230 Q 290 200 260 170 L 280 150 Q 330 200 280 250 Z" fill="url(#accentGradient)" filter="url(#dropShadow)"/>
+    
+    <!-- Connecting neural lines/circuits from the claws to the core -->
+    <path d="M 200 135 L 200 160" stroke="#8B5CF6" stroke-width="4" stroke-linecap="round"/>
+    <path d="M 145 200 L 160 215" stroke="#3B82F6" stroke-width="4" stroke-linecap="round"/>
+    <path d="M 255 200 L 240 215" stroke="#EC4899" stroke-width="4" stroke-linecap="round"/>
+  </g>
+
+  <!-- Digital / Binary Data Particles (The Bits) -->
+  <g fill="#FFFFFF" opacity="0.6">
+    <rect x="120" y="100" width="8" height="8" rx="2" />
+    <rect x="280" y="110" width="8" height="8" rx="2" />
+    <rect x="100" y="270" width="8" height="8" rx="2" />
+    <rect x="270" y="290" width="8" height="8" rx="2" />
+    <rect x="210" y="320" width="8" height="8" rx="2" />
+    <circle cx="150" cy="300" r="3" />
+    <circle cx="250" cy="90" r="3" />
+    <circle cx="320" cy="200" r="4" />
+    <circle cx="80" cy="180" r="4" />
+  </g>
 </svg>
