@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button'
 import { GlassCard } from '@/components/dashboard/glass-card'
 import { Check, ArrowRight } from 'lucide-react'
 
-const features = [
+const proFeatures = [
   'Unlimited Telegram bot messages',
   'Host 1 concurrent Openclaw agent',
   'All LLM Providers supported',
@@ -10,6 +10,15 @@ const features = [
   'Live dashboard & logs',
   'Automatic process restarts',
   '99.9% uptime SLA',
+]
+
+const enterpriseFeatures = [
+  'Whitelabel custom branding',
+  'Host 10+ concurrent Openclaw agents',
+  'Custom skill development',
+  'Dedicated account manager',
+  'Priority 24/7 support channel',
+  '99.99% uptime SLA',
 ]
 
 export function PricingSection() {
@@ -26,8 +35,9 @@ export function PricingSection() {
           </p>
         </div>
 
-        {/* Pricing card */}
-        <div className="max-w-lg mx-auto">
+        {/* Pricing cards grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          {/* Pro Plan */}
           <GlassCard className="relative p-8 overflow-hidden">
             {/* Premium badge */}
             <div className="absolute top-6 right-6">
@@ -63,7 +73,7 @@ export function PricingSection() {
 
               {/* Features list */}
               <div className="space-y-3 pt-6 border-t" style={{ borderColor: 'var(--glass-border)' }}>
-                {features.map((feature, idx) => (
+                {proFeatures.map((feature, idx) => (
                   <div key={idx} className="flex items-start gap-3">
                     <Check className="w-5 h-5 text-[oklch(0.70_0.25_142.5)] flex-shrink-0 mt-0.5" />
                     <span className="text-foreground text-sm">{feature}</span>
@@ -77,6 +87,45 @@ export function PricingSection() {
               </div>
             </div>
           </GlassCard>
+
+          {/* Enterprise Plan (Coming Soon) */}
+          <GlassCard className="relative p-8 overflow-hidden opacity-75">
+            <div className="absolute top-6 right-6">
+              <div className="px-3 py-1 rounded-full bg-muted border border-muted-foreground/30 text-muted-foreground text-xs font-semibold">
+                COMING SOON
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <div className="space-y-3">
+                <h3 className="text-2xl font-bold text-muted-foreground">Master Plan</h3>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-4xl font-bold text-muted-foreground">Custom</span>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  For enterprises wanting multiple specialized Openclaw agents.
+                </p>
+              </div>
+
+              <Button
+                disabled
+                size="lg"
+                variant="outline"
+                className="w-full border-muted-foreground/30 text-muted-foreground"
+              >
+                Join Waitlist
+              </Button>
+
+              <div className="space-y-3 pt-6 border-t" style={{ borderColor: 'var(--glass-border)' }}>
+                {enterpriseFeatures.map((feature, idx) => (
+                  <div key={idx} className="flex items-start gap-3 opacity-60">
+                    <Check className="w-5 h-5 text-muted-foreground flex-shrink-0 mt-0.5" />
+                    <span className="text-muted-foreground text-sm">{feature}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </GlassCard>
         </div>
 
         {/* FAQ */}
@@ -85,16 +134,16 @@ export function PricingSection() {
           <div className="space-y-4">
             {[
               {
-                q: 'Can I upgrade or downgrade anytime?',
-                a: 'Yes, you can change your plan at any time. Changes take effect on your next billing cycle.',
+                q: 'What is an Openclaw agent?',
+                a: 'Openclaw is a powerful, autonomous AI framework. An Openclaw agent can browse data, use tools, and maintain context over time, operating independently on Telegram based on your instructions.',
               },
               {
-                q: 'What payment methods do you accept?',
-                a: 'We accept all major credit cards, PayPal, and wire transfers for enterprise customers.',
+                q: 'Do I need my own OpenAI / Anthropic keys?',
+                a: 'Yes. Bitslave acts as the orchestration and hosting layer. You provide your own LLM API keys via our secure dashboard so you only pay the exact API costs for what you use.',
               },
               {
-                q: 'Is there a free trial?',
-                a: 'Yes, we offer a 7-day free trial with full access to all Pro features. No credit card required.',
+                q: 'What skills can I assign my bot?',
+                a: 'You can equip your bot with specialized skills like email reading, schedule management, report generation, and data analysis through our Skill Marketplace.',
               },
             ].map((faq, idx) => (
               <div
