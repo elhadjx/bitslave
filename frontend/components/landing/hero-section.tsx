@@ -1,6 +1,6 @@
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { ArrowRight } from 'lucide-react'
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
 
 export function HeroSection() {
   return (
@@ -16,7 +16,13 @@ export function HeroSection() {
         <div className="max-w-4xl mx-auto space-y-6 animate-slide-in">
           {/* Tagline */}
           <div className="inline-block">
-            <div className="px-4 py-2 rounded-full border backdrop-blur-xl" style={{ borderColor: 'var(--glass-border)', backgroundColor: 'var(--glass-bg)' }}>
+            <div
+              className="px-4 py-2 rounded-full border backdrop-blur-xl"
+              style={{
+                borderColor: "var(--glass-border)",
+                backgroundColor: "var(--glass-bg)",
+              }}
+            >
               <h2 className="text-sm font-medium text-muted-foreground m-0">
                 Host and Deploy your Openclaw Agent in 60 seconds online
               </h2>
@@ -33,7 +39,9 @@ export function HeroSection() {
 
           {/* Subheading */}
           <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto">
-            Enslave an autonomous Openclaw AI agent to do your bidding 24/7. Just plug in your keys and we'll put it to work while you touch grass.
+            Enslave an autonomous Openclaw AI agent to do your bidding 24/7.
+            Just plug in your keys and we'll put it to work while you touch
+            grass.
           </p>
 
           {/* CTA Buttons */}
@@ -43,18 +51,22 @@ export function HeroSection() {
               size="lg"
               className="bg-accent text-accent-foreground hover:bg-accent/90 px-8"
             >
-              <Link href="/dashboard">
+              <Link href="/login">
                 Get Started
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Link>
             </Button>
+
             <Button
               size="lg"
               variant="outline"
               className="hover:bg-[oklch(0.15_0_0)]"
-              style={{ borderColor: 'var(--glass-border)', backgroundColor: 'var(--glass-bg)' }}
+              style={{
+                borderColor: "var(--glass-border)",
+                backgroundColor: "var(--glass-bg)",
+              }}
             >
-              Watch Demo
+              <Link href="/login">Login</Link>
             </Button>
           </div>
 
@@ -76,5 +88,5 @@ export function HeroSection() {
         </div>
       </div>
     </div>
-  )
+  );
 }

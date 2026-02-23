@@ -1,25 +1,25 @@
-import { Button } from '@/components/ui/button'
-import { GlassCard } from '@/components/dashboard/glass-card'
-import { Check, ArrowRight } from 'lucide-react'
+import { Button } from "@/components/ui/button";
+import { GlassCard } from "@/components/dashboard/glass-card";
+import { Check, ArrowRight } from "lucide-react";
 
 const proFeatures = [
-  'Unlimited Telegram bot messages',
-  'Host 1 concurrent Openclaw agent',
-  'All LLM Providers supported',
-  'Access to all Openclaw skills',
-  'Live dashboard & logs',
-  'Automatic process restarts',
-  '99.9% uptime SLA',
-]
+  "Unlimited Telegram bot messages",
+  "Host 1 concurrent Openclaw agent",
+  "All LLM Providers supported",
+  "Access to all Openclaw skills",
+  "Live dashboard & logs",
+  "Automatic process restarts",
+  "99.9% uptime SLA",
+];
 
 const enterpriseFeatures = [
-  'Whitelabel custom branding',
-  'Host 10+ concurrent Openclaw agents',
-  'Custom skill development',
-  'Dedicated account manager',
-  'Priority 24/7 support channel',
-  '99.99% uptime SLA',
-]
+  "Whitelabel custom branding",
+  "Host 10+ concurrent Openclaw agents",
+  "Custom skill development",
+  "Dedicated account manager",
+  "Priority 24/7 support channel",
+  "99.99% uptime SLA",
+];
 
 export function PricingSection() {
   return (
@@ -72,7 +72,10 @@ export function PricingSection() {
               </Button>
 
               {/* Features list */}
-              <div className="space-y-3 pt-6 border-t" style={{ borderColor: 'var(--glass-border)' }}>
+              <div
+                className="space-y-3 pt-6 border-t"
+                style={{ borderColor: "var(--glass-border)" }}
+              >
                 {proFeatures.map((feature, idx) => (
                   <div key={idx} className="flex items-start gap-3">
                     <Check className="w-5 h-5 text-[oklch(0.70_0.25_142.5)] flex-shrink-0 mt-0.5" />
@@ -83,7 +86,7 @@ export function PricingSection() {
 
               {/* Footer note */}
               <div className="text-xs text-muted-foreground text-center pt-4">
-                Free trial for 7 days. No credit card required.
+                {/* Footer note */}
               </div>
             </div>
           </GlassCard>
@@ -98,9 +101,13 @@ export function PricingSection() {
 
             <div className="space-y-6">
               <div className="space-y-3">
-                <h3 className="text-2xl font-bold text-muted-foreground">Master Plan</h3>
+                <h3 className="text-2xl font-bold text-muted-foreground">
+                  Master Plan
+                </h3>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-bold text-muted-foreground">Custom</span>
+                  <span className="text-4xl font-bold text-muted-foreground">
+                    Custom
+                  </span>
                 </div>
                 <p className="text-sm text-muted-foreground">
                   For enterprises wanting multiple specialized Openclaw agents.
@@ -116,11 +123,16 @@ export function PricingSection() {
                 Join Waitlist
               </Button>
 
-              <div className="space-y-3 pt-6 border-t" style={{ borderColor: 'var(--glass-border)' }}>
+              <div
+                className="space-y-3 pt-6 border-t"
+                style={{ borderColor: "var(--glass-border)" }}
+              >
                 {enterpriseFeatures.map((feature, idx) => (
                   <div key={idx} className="flex items-start gap-3 opacity-60">
                     <Check className="w-5 h-5 text-muted-foreground flex-shrink-0 mt-0.5" />
-                    <span className="text-muted-foreground text-sm">{feature}</span>
+                    <span className="text-muted-foreground text-sm">
+                      {feature}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -130,26 +142,31 @@ export function PricingSection() {
 
         {/* FAQ */}
         <div className="mt-16 max-w-2xl mx-auto">
-          <h3 className="text-xl font-semibold text-center mb-8">Frequently Asked Questions</h3>
+          <h3 className="text-xl font-semibold text-center mb-8">
+            Frequently Asked Questions
+          </h3>
           <div className="space-y-4">
             {[
               {
-                q: 'What is an Openclaw agent?',
-                a: 'Openclaw is a powerful, autonomous AI framework. An Openclaw agent can browse data, use tools, and maintain context over time, operating independently on Telegram based on your instructions.',
+                q: "What is an Openclaw agent?",
+                a: "Openclaw is a powerful, autonomous AI framework. An Openclaw agent can browse data, use tools, and maintain context over time, operating independently on Telegram based on your instructions.",
               },
               {
-                q: 'Do I need my own OpenAI / Anthropic keys?',
-                a: 'Yes. Bitslave acts as the orchestration and hosting layer. You provide your own LLM API keys via our secure dashboard so you only pay the exact API costs for what you use.',
+                q: "Do I need my own OpenAI / Anthropic keys?",
+                a: "Yes. Bitslave acts as the orchestration and hosting layer. You provide your own LLM API keys via our secure dashboard so you only pay the exact API costs for what you use.",
               },
               {
-                q: 'What skills can I assign my bot?',
-                a: 'You can equip your bot with specialized skills like email reading, schedule management, report generation, and data analysis through our Skill Marketplace.',
+                q: "What skills can I assign my bot?",
+                a: "You can equip your bot with specialized skills like email reading, schedule management, report generation, and data analysis through our Skill Marketplace.",
               },
             ].map((faq, idx) => (
               <div
                 key={idx}
                 className="p-4 rounded-lg border"
-                style={{ borderColor: 'var(--glass-border)', backgroundColor: 'var(--glass-bg)' }}
+                style={{
+                  borderColor: "var(--glass-border)",
+                  backgroundColor: "var(--glass-bg)",
+                }}
               >
                 <h4 className="font-semibold text-foreground mb-2">{faq.q}</h4>
                 <p className="text-sm text-muted-foreground">{faq.a}</p>
@@ -159,5 +176,5 @@ export function PricingSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }
