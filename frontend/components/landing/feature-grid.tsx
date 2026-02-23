@@ -17,7 +17,7 @@ const features = [
   {
     icon: Zap,
     title: 'Deploy Instantly',
-    description: 'We orchestrate and host the bot for you. Live and replying 24/7 on Telegram.',
+    description: 'We orchestrate and host the Openclaw bot for you. Live and replying 24/7 on Telegram.',
     number: '03',
   },
 ]
@@ -32,7 +32,7 @@ export function FeatureGrid() {
             From Token to <span className="bg-gradient-to-r from-[oklch(0.70_0.25_142.5)] to-[oklch(0.75_0.22_252)] bg-clip-text text-transparent">Live in Minutes</span>
           </h2>
           <p className="text-muted-foreground text-lg">
-            Three simple steps to deploy your autonomous Telegram agent on Bitslave.
+            Three simple steps to deploy your autonomous Openclaw agent on Bitslave.
           </p>
         </div>
 

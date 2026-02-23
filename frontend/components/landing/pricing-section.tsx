@@ -4,9 +4,9 @@ import { Check, ArrowRight } from 'lucide-react'
 
 const features = [
   'Unlimited Telegram bot messages',
-  'Host 1 concurrent agent',
+  'Host 1 concurrent Openclaw agent',
   'All LLM Providers supported',
-  'Access to all agent skills',
+  'Access to all Openclaw skills',
   'Live dashboard & logs',
   'Automatic process restarts',
   '99.9% uptime SLA',
