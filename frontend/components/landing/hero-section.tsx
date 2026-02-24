@@ -50,7 +50,7 @@ export function HeroSection() {
               size="lg"
               className="bg-accent text-accent-foreground hover:bg-accent/90 px-8"
             >
-              <Link href="/login">
+              <Link href="/register">
                 Get Started
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Link>
