@@ -13,6 +13,7 @@ import { GlassCard } from "@/components/dashboard/glass-card";
 
 export default function RegisterPage() {
   const [step, setStep] = useState(1);
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [acceptedTos, setAcceptedTos] = useState(false);
@@ -31,8 +32,8 @@ export default function RegisterPage() {
     e.preventDefault();
     setError("");
     if (step === 1) {
-      if (!email || !password) {
-        setError("Email and password are required.");
+      if (!name || !email || !password) {
+        setError("Name, email, and password are required.");
         return;
       }
       if (!acceptedTos) {
@@ -55,12 +56,20 @@ export default function RegisterPage() {
     }
 
     try {
-      const apiUrl =
+      const baseUrl =
         process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
+      // Ensure the URL correctly points to the /api endpoint
+      const apiUrl = baseUrl.endsWith("/api")
+        ? baseUrl
+        : baseUrl.endsWith("/")
+          ? `${baseUrl}api`
+          : `${baseUrl}/api`;
+
       const res = await fetch(`${apiUrl}/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          name,
           email,
           password,
           telegramToken,
@@ -134,6 +143,17 @@ export default function RegisterPage() {
         {/* Step 1: Credentials */}
         {step === 1 && (
           <form onSubmit={handleNext} className="space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="name">Full Name</Label>
+              <Input
+                id="name"
+                type="text"
+                required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="bg-input/50"
+              />
+            </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input

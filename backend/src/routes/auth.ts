@@ -12,9 +12,9 @@ const JWT_SECRET = appConfig.jwtSecret;
 
 authRouter.post('/register', async (req: Request, res: Response) => {
   try {
-    const { email, password, telegramToken, llmProvider, llmApiKey } = req.body;
+    const { name, email, password, telegramToken, llmProvider, llmApiKey } = req.body;
 
-    if (!email || !password || !telegramToken || !llmProvider || !llmApiKey) {
+    if (!name || !email || !password || !telegramToken || !llmProvider || !llmApiKey) {
       return res.status(400).json({ error: 'Missing required registration fields' });
     }
 
@@ -26,7 +26,7 @@ authRouter.post('/register', async (req: Request, res: Response) => {
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(password, salt);
 
-    const user = new User({ email, passwordHash, paymentStatus: 'pending' });
+    const user = new User({ name, email, passwordHash, paymentStatus: 'pending' });
     await user.save();
 
     const config = new AgentConfig({
@@ -58,7 +58,7 @@ authRouter.post('/register', async (req: Request, res: Response) => {
     res.json({ 
       checkoutUrl, 
       token, 
-      user: { email: user.email, paymentStatus: user.paymentStatus }
+      user: { name: user.name, email: user.email, paymentStatus: user.paymentStatus }
     });
   } catch (error) {
     console.error('Registration error:', error);
@@ -89,7 +89,7 @@ authRouter.post('/login', async (req: Request, res: Response) => {
 
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '7d' });
 
-    res.json({ token, user: { email: user.email, paymentStatus: user.paymentStatus } });
+    res.json({ token, user: { name: user.name, email: user.email, paymentStatus: user.paymentStatus } });
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ error: 'Internal server error during login' });
