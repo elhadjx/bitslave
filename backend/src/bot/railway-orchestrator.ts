@@ -72,13 +72,27 @@ export class RailwayOrchestrator {
           projectId: appConfig.railwayProjectId,
           name: `bot-${config.userId.toString().substring(0, 8)}`,
           source: {
-            repo: "vignesh07/clawdbot-railway-template"
+            repo: "elhadjx/bitslave"
           }
         }
       };
       
       const createResult = await this.fetchGraphQL(createServiceQuery, createServiceVars);
       const serviceId = createResult.serviceCreate.id;
+
+      // 1.1 Set root directory to instance_template
+      const updateInstanceQuery = `
+        mutation ServiceInstanceUpdate($serviceId: String!, $environmentId: String!, $input: ServiceInstanceUpdateInput!) {
+          serviceInstanceUpdate(serviceId: $serviceId, environmentId: $environmentId, input: $input)
+        }
+      `;
+      await this.fetchGraphQL(updateInstanceQuery, {
+        serviceId: serviceId,
+        environmentId: environmentId,
+        input: {
+          rootDirectory: "/instance_template"
+        }
+      });
 
       // 1.5 Create Volume and mount it at /data
       const createVolumeQuery = `
@@ -106,17 +120,38 @@ export class RailwayOrchestrator {
         }
       `;
       
-      // Map BitSlave variables to what OpenClaw expects (adjust variable names if openclaw uses different ones)
-      const setupPassword = "admin";
+      // Generate secure random setup password
+      const setupPassword = crypto.randomBytes(16).toString('hex');
       const gatewayToken = crypto.randomBytes(32).toString('hex');
+
+      // Build callback URL for the instance to POST status updates to our backend
+      const backendUrl = appConfig.frontendUrl.replace(':3000', `:${appConfig.port}`);
+      const callbackUrl = `${backendUrl}/api/instance-callback`;
+
+      // Serialize skills config for the instance
+      const skillsJson = config.skills ? JSON.stringify(config.skills) : undefined;
+
       const variables: Record<string, string> = {
-        TELEGRAM_TOKEN: config.telegramToken,
-        LLM_PROVIDER: config.llmProvider,
-        OPENAI_API_KEY: config.llmApiKey,
+        // OpenClaw core config (fixed: was CLAWDBOT_*)
+        OPENCLAW_STATE_DIR: "/data/.openclaw",
+        OPENCLAW_WORKSPACE_DIR: "/data/workspace",
+        OPENCLAW_GATEWAY_TOKEN: gatewayToken,
         SETUP_PASSWORD: setupPassword,
-        CLAWDBOT_STATE_DIR: "/data/.clawdbot",
-        CLAWDBOT_WORKSPACE_DIR: "/data/workspace",
-        CLAWDBOT_GATEWAY_TOKEN: gatewayToken
+
+        // Auto-setup: LLM provider config
+        LLM_PROVIDER: config.llmProvider,
+        LLM_API_KEY: config.llmApiKey,
+
+        // Auto-setup: Telegram token
+        TELEGRAM_TOKEN: config.telegramToken,
+
+        // Webhook callback for status updates
+        CALLBACK_URL: callbackUrl,
+        BACKEND_API_URL: backendUrl,
+        INSTANCE_ID: serviceId,
+
+        // Skills injection
+        ...(skillsJson ? { SKILLS_JSON: skillsJson } : {}),
       };
 
       const upsertVars = {
