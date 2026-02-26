@@ -10,7 +10,8 @@ export class RailwayOrchestrator {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${appConfig.railwayProjectToken}`
+        'Authorization': `Bearer ${appConfig.railwayProjectToken}`,
+        'Project-Access-Token': appConfig.railwayProjectToken
       },
       body: JSON.stringify({ query, variables })
     });
