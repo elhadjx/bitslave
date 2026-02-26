@@ -1,6 +1,7 @@
 import { IAgentConfig } from '../models/AgentConfig';
 import { Log } from '../models/Log';
 import { config as appConfig } from '../config';
+import crypto from 'crypto';
 
 const RAILWAY_API_URL = 'https://backboard.railway.app/graphql/v2';
 
@@ -48,7 +49,7 @@ export class RailwayOrchestrator {
     return edges[0].node.id;
   }
 
-  static async deployAgent(config: IAgentConfig): Promise<string | null> {
+  static async deployAgent(config: IAgentConfig): Promise<{ serviceId: string, domain: string, setupPassword: string } | null> {
     try {
       if (!appConfig.railwayProjectToken || !appConfig.railwayProjectId) {
         throw new Error('Railway configuration is missing (Token or Project ID)');
@@ -106,10 +107,14 @@ export class RailwayOrchestrator {
       `;
       
       // Map BitSlave variables to what OpenClaw expects (adjust variable names if openclaw uses different ones)
+      const setupPassword = "admin";
       const variables: Record<string, string> = {
         TELEGRAM_TOKEN: config.telegramToken,
         LLM_PROVIDER: config.llmProvider,
-        OPENAI_API_KEY: config.llmApiKey 
+        OPENAI_API_KEY: config.llmApiKey,
+        SETUP_PASSWORD: setupPassword,
+        CLAWDBOT_STATE_DIR: "/data/.clawdbot",
+        CLAWDBOT_WORKSPACE_DIR: "/data/workspace"
       };
 
       const upsertVars = {
@@ -123,8 +128,24 @@ export class RailwayOrchestrator {
 
       await this.fetchGraphQL(upsertVarsQuery, upsertVars);
 
-      console.log(`[RailwayOrchestrator] Agent deployed successfully with serviceId: ${serviceId}`);
-      return serviceId;
+      // 3. Generate Domain
+      const domainQuery = `
+        mutation ServiceDomainCreate($input: ServiceDomainCreateInput!) {
+          serviceDomainCreate(input: $input) {
+            domain
+          }
+        }
+      `;
+      const domainResult = await this.fetchGraphQL(domainQuery, {
+        input: {
+          environmentId: environmentId,
+          serviceId: serviceId
+        }
+      });
+      const generatedDomain = domainResult.serviceDomainCreate.domain;
+
+      console.log(`[RailwayOrchestrator] Agent deployed successfully with serviceId: ${serviceId}, domain: ${generatedDomain}`);
+      return { serviceId, domain: generatedDomain, setupPassword };
     } catch (error) {
       console.error(`[RailwayOrchestrator] Failed to deploy agent:`, error);
       return null;

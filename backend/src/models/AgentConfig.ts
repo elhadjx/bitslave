@@ -16,6 +16,8 @@ export interface IAgentConfig extends Document {
   llmApiKey: string;
   isDeployed: boolean;
   railwayServiceId?: string;
+  setupPassword?: string;
+  railwayDomain?: string;
   skills: ISkillConfig;
   createdAt: Date;
   updatedAt: Date;
@@ -29,6 +31,8 @@ const AgentConfigSchema: Schema = new Schema(
     llmApiKey: { type: String, required: true },
     isDeployed: { type: Boolean, default: false },
     railwayServiceId: { type: String },
+    setupPassword: { type: String },
+    railwayDomain: { type: String },
     skills: {
       emailProcessing: { type: Boolean, default: false },
       scheduleManagement: { type: Boolean, default: false },

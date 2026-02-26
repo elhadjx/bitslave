@@ -54,12 +54,14 @@ apiRouter.post('/deploy', async (req: AuthRequest, res: Response) => {
     }
 
     // Trigger Railway Deployment here
-    const serviceId = await RailwayOrchestrator.deployAgent(config);
+    const result = await RailwayOrchestrator.deployAgent(config);
     
-    if (serviceId) {
-      config.railwayServiceId = serviceId;
+    if (result) {
+      config.railwayServiceId = result.serviceId;
+      config.railwayDomain = result.domain;
+      config.setupPassword = result.setupPassword;
       await config.save();
-      await Log.create({ userId, message: `Agent deployed via Railway with service ID: ${serviceId}`, level: 'info' });
+      await Log.create({ userId, message: `Agent deployed via Railway with service ID: ${result.serviceId}`, level: 'info' });
       res.json({ message: 'Deployment triggered successfully', config });
     } else {
       config.isDeployed = false;
