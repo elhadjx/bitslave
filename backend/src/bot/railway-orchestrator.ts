@@ -119,6 +119,19 @@ export class RailwayOrchestrator {
 
       await this.fetchGraphQL(updateInstanceQuery, updateInstanceVars);
 
+      // 4. Trigger Deployment
+      const redeployQuery = `
+        mutation ServiceInstanceRedeploy($serviceId: String!, $environmentId: String!) {
+          serviceInstanceRedeploy(serviceId: $serviceId, environmentId: $environmentId)
+        }
+      `;
+      const redeployVars = {
+        serviceId: serviceId,
+        environmentId: environmentId
+      };
+      
+      await this.fetchGraphQL(redeployQuery, redeployVars);
+
       console.log(`[RailwayOrchestrator] Agent deployed successfully with serviceId: ${serviceId}`);
       return serviceId;
     } catch (error) {
