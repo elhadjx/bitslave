@@ -46,10 +46,17 @@ authRouter.post('/register', async (req: Request, res: Response) => {
     });
     await config.save();
 
-    // Create Polar checkout session to finalize registration
-    const productId = appConfig.polarSubscriptionProductId;
-    const successUrl = `${appConfig.frontendUrl}/dashboard?session_id={CHECKOUT_SESSION_ID}`;
-    const checkoutUrl = await BillingService.createCheckoutSession(user._id.toString(), productId, successUrl);
+    let checkoutUrl = null;
+
+    if (appConfig.inTest) {
+      user.paymentStatus = 'paid';
+      await user.save();
+    } else {
+      // Create Polar checkout session to finalize registration
+      const productId = appConfig.polarSubscriptionProductId;
+      const successUrl = `${appConfig.frontendUrl}/dashboard?session_id={CHECKOUT_SESSION_ID}`;
+      checkoutUrl = await BillingService.createCheckoutSession(user._id.toString(), productId, successUrl);
+    }
 
     // Sign a token so the user is virtually "logged in" on the frontend before redirect.
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '7d' });
