@@ -69,7 +69,10 @@ export class RailwayOrchestrator {
       const createServiceVars = {
         input: {
           projectId: appConfig.railwayProjectId,
-          name: `bot-${config.userId.toString().substring(0, 8)}`
+          name: `bot-${config.userId.toString().substring(0, 8)}`,
+          source: {
+            repo: "vignesh07/clawdbot-railway-template"
+          }
         }
       };
       
@@ -100,37 +103,6 @@ export class RailwayOrchestrator {
       };
 
       await this.fetchGraphQL(upsertVarsQuery, upsertVars);
-
-      // 3. Update Service Instance to link GitHub Repo
-      const updateInstanceQuery = `
-        mutation ServiceInstanceUpdate($serviceId: String!, $environmentId: String!, $input: ServiceInstanceUpdateInput!) {
-          serviceInstanceUpdate(serviceId: $serviceId, environmentId: $environmentId, input: $input)
-        }
-      `;
-      const updateInstanceVars = {
-        serviceId: serviceId,
-        environmentId: environmentId,
-        input: {
-          source: {
-            repo: "vignesh07/clawdbot-railway-template"
-          }
-        }
-      };
-
-      await this.fetchGraphQL(updateInstanceQuery, updateInstanceVars);
-
-      // 4. Trigger Deployment
-      const redeployQuery = `
-        mutation ServiceInstanceRedeploy($serviceId: String!, $environmentId: String!) {
-          serviceInstanceRedeploy(serviceId: $serviceId, environmentId: $environmentId)
-        }
-      `;
-      const redeployVars = {
-        serviceId: serviceId,
-        environmentId: environmentId
-      };
-      
-      await this.fetchGraphQL(redeployQuery, redeployVars);
 
       console.log(`[RailwayOrchestrator] Agent deployed successfully with serviceId: ${serviceId}`);
       return serviceId;
