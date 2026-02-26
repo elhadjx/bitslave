@@ -79,6 +79,25 @@ export class RailwayOrchestrator {
       const createResult = await this.fetchGraphQL(createServiceQuery, createServiceVars);
       const serviceId = createResult.serviceCreate.id;
 
+      // 1.5 Create Volume and mount it at /data
+      const createVolumeQuery = `
+        mutation VolumeCreate($input: VolumeCreateInput!) {
+          volumeCreate(input: $input) {
+            id
+          }
+        }
+      `;
+      const createVolumeVars = {
+        input: {
+          projectId: appConfig.railwayProjectId,
+          environmentId: environmentId,
+          serviceId: serviceId,
+          mountPath: "/data"
+        }
+      };
+      
+      await this.fetchGraphQL(createVolumeQuery, createVolumeVars);
+
       // 2. Set Environment Variables
       const upsertVarsQuery = `
         mutation VariableCollectionUpsert($input: VariableCollectionUpsertInput!) {
