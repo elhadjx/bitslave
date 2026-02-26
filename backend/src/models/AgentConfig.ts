@@ -15,6 +15,7 @@ export interface IAgentConfig extends Document {
   llmProvider: string;
   llmApiKey: string;
   isDeployed: boolean;
+  railwayServiceId?: string;
   skills: ISkillConfig;
   createdAt: Date;
   updatedAt: Date;
@@ -27,6 +28,7 @@ const AgentConfigSchema: Schema = new Schema(
     llmProvider: { type: String, required: true, enum: ['openai', 'anthropic', 'deepseek'] },
     llmApiKey: { type: String, required: true },
     isDeployed: { type: Boolean, default: false },
+    railwayServiceId: { type: String },
     skills: {
       emailProcessing: { type: Boolean, default: false },
       scheduleManagement: { type: Boolean, default: false },

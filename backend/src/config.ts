@@ -13,4 +13,6 @@ export const config = {
   llmApiKey: process.env.LLM_API_KEY || "",
   skills: JSON.parse(process.env.SKILLS || "{}"),
   frontendUrl: process.env.FRONTEND_URL || "http://localhost:3000",
+  railwayProjectToken: process.env.RAILWAY_PROJECT_TOKEN || "",
+  railwayProjectId: process.env.RAILWAY_PROJECT_ID || "",
 };

@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { AgentConfig } from '../models/AgentConfig';
 import { Log } from '../models/Log';
-import { DockerOrchestrator } from '../bot/docker-orchestrator';
+import { RailwayOrchestrator } from '../bot/railway-orchestrator';
 import { BillingService } from '../billing/polar';
 import { requireAuth, AuthRequest } from '../middleware/auth';
 
@@ -53,17 +53,19 @@ apiRouter.post('/deploy', async (req: AuthRequest, res: Response) => {
       });
     }
 
-    // Trigger Docker Deployment here
-    const deploySuccess = await DockerOrchestrator.deployAgent(config);
+    // Trigger Railway Deployment here
+    const serviceId = await RailwayOrchestrator.deployAgent(config);
     
-    if (deploySuccess) {
-      await Log.create({ userId, message: 'Agent deployed via Docker Orchestrator', level: 'info' });
+    if (serviceId) {
+      config.railwayServiceId = serviceId;
+      await config.save();
+      await Log.create({ userId, message: `Agent deployed via Railway with service ID: ${serviceId}`, level: 'info' });
       res.json({ message: 'Deployment triggered successfully', config });
     } else {
       config.isDeployed = false;
       await config.save();
-      await Log.create({ userId, message: 'Failed to deploy agent via Docker', level: 'error' });
-      res.status(500).json({ error: 'Failed to deploy docker container' });
+      await Log.create({ userId, message: 'Failed to deploy agent via Railway', level: 'error' });
+      res.status(500).json({ error: 'Failed to deploy service' });
     }
   } catch (error) {
     res.status(500).json({ error: 'Failed to deploy agent' });
@@ -82,15 +84,17 @@ apiRouter.post('/stop', async (req: AuthRequest, res: Response) => {
       config.isDeployed = false;
       await config.save();
       
-      // Trigger Docker Stop here
-      const stopSuccess = await DockerOrchestrator.stopAgent(userId);
+      // Trigger Railway Stop here
+      const stopSuccess = await RailwayOrchestrator.stopAgent(config.railwayServiceId);
       
       if (stopSuccess) {
-        await Log.create({ userId, message: 'Agent stopped via Docker Orchestrator', level: 'info' });
+        config.railwayServiceId = "";
+        await config.save();
+        await Log.create({ userId, message: 'Agent stopped via Railway Orchestrator', level: 'info' });
         res.json({ message: 'Agent stopped successfully' });
       } else {
-        await Log.create({ userId, message: 'Failed to stop agent via Docker', level: 'error' });
-        res.status(500).json({ error: 'Failed to stop docker container' });
+        await Log.create({ userId, message: 'Failed to stop agent via Railway', level: 'error' });
+        res.status(500).json({ error: 'Failed to stop service' });
       }
     } else {
       res.status(400).json({ error: 'Agent is not deployed' });
