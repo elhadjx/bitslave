@@ -108,13 +108,15 @@ export class RailwayOrchestrator {
       
       // Map BitSlave variables to what OpenClaw expects (adjust variable names if openclaw uses different ones)
       const setupPassword = "admin";
+      const gatewayToken = crypto.randomBytes(32).toString('hex');
       const variables: Record<string, string> = {
         TELEGRAM_TOKEN: config.telegramToken,
         LLM_PROVIDER: config.llmProvider,
         OPENAI_API_KEY: config.llmApiKey,
         SETUP_PASSWORD: setupPassword,
         CLAWDBOT_STATE_DIR: "/data/.clawdbot",
-        CLAWDBOT_WORKSPACE_DIR: "/data/workspace"
+        CLAWDBOT_WORKSPACE_DIR: "/data/workspace",
+        CLAWDBOT_GATEWAY_TOKEN: gatewayToken
       };
 
       const upsertVars = {
