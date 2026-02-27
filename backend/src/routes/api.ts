@@ -172,7 +172,7 @@ apiRouter.post('/stop', async (req: AuthRequest, res: Response) => {
   }
 });
 
-// GET /setup-status — returns deployment progress from webhook callbacks
+// GET /setup-status — returns deployment progress; actively probes instance as fallback
 apiRouter.get('/setup-status', async (req: AuthRequest, res: Response) => {
   try {
     const userId = req.userId;
@@ -181,6 +181,40 @@ apiRouter.get('/setup-status', async (req: AuthRequest, res: Response) => {
     const config = await AgentConfig.findOne({ userId });
     if (!config || !config.railwayDomain) {
       return res.json({ status: 'not_deployed' });
+    }
+
+    // If not yet marked as configured, actively probe the instance
+    if (!config.configuredAt && config.isDeployed && config.railwayDomain) {
+      try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 5000);
+        const probeRes = await fetch(`https://${config.railwayDomain}/api/instance-status`, {
+          signal: controller.signal,
+        });
+        clearTimeout(timeout);
+
+        if (probeRes.ok) {
+          const probeData = await probeRes.json() as any;
+          if (probeData.configured) {
+            // Instance is configured! Update our DB
+            config.configuredAt = new Date();
+            if (probeData.gatewayRunning !== undefined) {
+              config.instanceHealth = {
+                uptimeMs: probeData.uptimeMs || 0,
+                configured: true,
+                gatewayRunning: Boolean(probeData.gatewayRunning),
+                gatewayReachable: Boolean(probeData.gatewayReachable),
+                lastError: probeData.lastError || null,
+                timestamp: new Date(),
+              };
+            }
+            await config.save();
+            await Log.create({ userId: config.userId, message: 'Instance confirmed configured via probe', level: 'info' });
+          }
+        }
+      } catch {
+        // Instance not reachable yet — that's fine, it's still provisioning
+      }
     }
 
     res.json({

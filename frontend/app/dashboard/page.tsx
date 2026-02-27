@@ -279,6 +279,38 @@ export default function DashboardPage() {
                       )}
                     </div>
                   </div>
+
+                  {/* Open Dashboard Button */}
+                  {setupStatus?.domain &&
+                    setupStatus?.status === "configured" && (
+                      <div
+                        className="pt-3 border-t"
+                        style={{ borderColor: "var(--glass-border)" }}
+                      >
+                        <a
+                          href={`https://${setupStatus.domain}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-md text-sm font-medium transition-colors"
+                          style={{
+                            backgroundColor: "oklch(0.75 0.22 252 / 0.15)",
+                            color: "oklch(0.75 0.22 252)",
+                            border: "1px solid oklch(0.75 0.22 252 / 0.3)",
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor =
+                              "oklch(0.75 0.22 252 / 0.25)";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor =
+                              "oklch(0.75 0.22 252 / 0.15)";
+                          }}
+                        >
+                          <ExternalLink className="w-4 h-4" />
+                          Open Dashboard
+                        </a>
+                      </div>
+                    )}
                 </div>
               )}
             </div>

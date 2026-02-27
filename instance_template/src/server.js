@@ -1894,7 +1894,7 @@ function attachGatewayAuthHeader(req) {
   }
 }
 
-app.use(requireDashboardAuth, async (req, res) => {
+app.use(async (req, res) => {
   // If not configured, force users to /setup for any non-setup routes.
   if (!isConfigured() && !req.path.startsWith("/setup")) {
     return res.redirect("/setup");
@@ -2010,22 +2010,6 @@ const server = app.listen(PORT, "0.0.0.0", async () => {
 });
 
 server.on("upgrade", async (req, socket, head) => {
-  // --- WebSocket password protection ---
-  if (SETUP_PASSWORD) {
-    const header = req.headers.authorization || "";
-    const [scheme, encoded] = header.split(" ");
-    let authed = false;
-    if (scheme === "Basic" && encoded) {
-      const decoded = Buffer.from(encoded, "base64").toString("utf8");
-      const idx = decoded.indexOf(":");
-      const password = idx >= 0 ? decoded.slice(idx + 1) : "";
-      authed = password === SETUP_PASSWORD;
-    }
-    if (!authed) {
-      socket.destroy();
-      return;
-    }
-  }
 
   if (!isConfigured()) {
     socket.destroy();

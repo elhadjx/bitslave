@@ -125,7 +125,8 @@ export class RailwayOrchestrator {
       const gatewayToken = crypto.randomBytes(32).toString('hex');
 
       // Build callback URL for the instance to POST status updates to our backend
-      const backendUrl = appConfig.frontendUrl.replace(':3000', `:${appConfig.port}`);
+      // Use BACKEND_URL if set (production), otherwise fall back to frontendUrl-based construction (local dev)
+      const backendUrl = appConfig.backendUrl || `${appConfig.frontendUrl.replace(/:\d+$/, '')}:${appConfig.port}`;
       const callbackUrl = `${backendUrl}/api/instance-callback`;
 
       // Serialize skills config for the instance
