@@ -1917,6 +1917,58 @@ app.use(async (req, res) => {
   }
 
   attachGatewayAuthHeader(req);
+
+  // Intercept HTML responses from the gateway to inject the gateway token
+  // so the Control UI auto-authenticates without prompting the user.
+  const isPageRequest =
+    req.method === "GET" &&
+    (req.headers.accept || "").includes("text/html") &&
+    !req.path.startsWith("/setup");
+
+  if (isPageRequest && OPENCLAW_GATEWAY_TOKEN) {
+    // Use selfHandleResponse to modify the HTML before sending to the client
+    const _proxyRes = proxy.web(req, res, {
+      target: GATEWAY_TARGET,
+      selfHandleResponse: true,
+    });
+
+    proxy.once("proxyRes", (proxyRes, _req, clientRes) => {
+      const statusCode = proxyRes.statusCode || 200;
+      const headers = { ...proxyRes.headers };
+      delete headers["content-length"]; // length will change after injection
+
+      // Collect the response body
+      const chunks = [];
+      proxyRes.on("data", (chunk) => chunks.push(chunk));
+      proxyRes.on("end", () => {
+        let body = Buffer.concat(chunks).toString("utf8");
+
+        // Inject a script that sets the gateway token for the Control UI
+        const tokenScript = `<script>
+          (function() {
+            try {
+              // Set the gateway token so the Control UI auto-connects
+              var token = ${JSON.stringify(OPENCLAW_GATEWAY_TOKEN)};
+              localStorage.setItem("oc-gateway-token", token);
+              localStorage.setItem("gateway_token", token);
+              localStorage.setItem("token", token);
+            } catch(e) {}
+          })();
+        </script>`;
+
+        if (body.includes("</head>")) {
+          body = body.replace("</head>", tokenScript + "</head>");
+        } else if (body.includes("<body")) {
+          body = body.replace("<body", tokenScript + "<body");
+        }
+
+        clientRes.writeHead(statusCode, headers);
+        clientRes.end(body);
+      });
+    });
+    return;
+  }
+
   return proxy.web(req, res, { target: GATEWAY_TARGET });
 });
 
