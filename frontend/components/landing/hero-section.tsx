@@ -1,6 +1,4 @@
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { WaitlistForm } from "./waitlist-form";
 
 export function HeroSection() {
   return (
@@ -43,30 +41,9 @@ export function HeroSection() {
             plug in your keys and we'll put it to work while you touch grass.
           </p>
 
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-8">
-            <Button
-              asChild
-              size="lg"
-              className="bg-accent text-accent-foreground hover:bg-accent/90 px-8"
-            >
-              <Link href="/register">
-                Get Started
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Link>
-            </Button>
-
-            <Button
-              size="lg"
-              variant="outline"
-              className="hover:bg-[oklch(0.15_0_0)]"
-              style={{
-                borderColor: "var(--glass-border)",
-                backgroundColor: "var(--glass-bg)",
-              }}
-            >
-              <Link href="/login">Login</Link>
-            </Button>
+          {/* Waitlist Form */}
+          <div className="pt-8" id="waitlist">
+            <WaitlistForm />
           </div>
 
           {/* Stats */}

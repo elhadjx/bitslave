@@ -65,8 +65,8 @@ export function PricingSection() {
                 size="lg"
                 className="w-full bg-accent text-accent-foreground hover:bg-accent/90 group"
               >
-                <a href="/register">
-                  Get Started
+                <a href="#waitlist">
+                  Join Waitlist
                   <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                 </a>
               </Button>
