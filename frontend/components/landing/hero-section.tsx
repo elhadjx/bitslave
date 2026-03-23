@@ -22,7 +22,7 @@ export function HeroSection() {
               }}
             >
               <h2 className="text-sm font-medium text-muted-foreground m-0">
-                Host and Deploy your Openclaw Agent in 60 seconds online
+                Host and deploy your Openclaw Agent in 60 seconds online
               </h2>
             </div>
           </div>
@@ -31,14 +31,13 @@ export function HeroSection() {
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight">
             <span className="block text-foreground">Your Openclaw Agent,</span>
             <span className="block bg-gradient-to-r from-[oklch(0.70_0.25_142.5)] via-[oklch(0.75_0.22_252)] to-[oklch(0.68_0.28_300)] bg-clip-text text-transparent">
-              Always Online
+              Hosted & Online 24/7
             </span>
           </h1>
 
           {/* Subheading */}
           <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto">
-            Deploy and manage Openclaw AI agents to do your bidding 24/7. Just
-            plug in your keys and we'll put it to work while you touch grass.
+            The easiest way to deploy your Openclaw AI agents. We handle the hosting, so you can just plug in your keys and touch grass.
           </p>
 
           {/* Waitlist Form */}

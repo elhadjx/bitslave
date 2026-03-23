@@ -5,19 +5,19 @@ const features = [
   {
     icon: Key,
     title: 'Connect Keys',
-    description: 'Provide your Telegram Bot Token and LLM API Key (OpenAI, Anthropic, DeepSeek).',
+    description: 'Simply provide your Telegram Bot Token and LLM API Key (OpenAI, Anthropic, DeepSeek). No coding required.',
     number: '01',
   },
   {
     icon: Puzzle,
     title: 'Assign Skills',
-    description: 'Equip your bot with custom abilities like email processing and data analysis.',
+    description: 'Easily equip your bot with powerful abilities like email processing, web search, and data analysis in one click.',
     number: '02',
   },
   {
     icon: Zap,
     title: 'Deploy Instantly',
-    description: 'We orchestrate and host the Openclaw bot for you. Live and replying 24/7 on Telegram.',
+    description: 'We orchestrate and host the Openclaw bot. Live and replying 24/7 on Telegram without server headaches.',
     number: '03',
   },
 ]

@@ -8,15 +8,15 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://bitslave.dev'),
+  metadataBase: new URL('https://bitslave.cloud'),
   title: {
-    default: 'Deploy Openclaw Agents Online | Bitslave',
+    default: 'Deploy & Host Openclaw Agents Online | Bitslave',
     template: '%s | Bitslave - Openclaw Hosting'
   },
-  description: 'Deploy and host your Openclaw autonomous AI agent in minutes. The easiest way to connect your Telegram bot with Openclaw and run it online 24/7.',
+  description: 'The easiest platform to host and deploy your Openclaw autonomous AI agent online 24/7. Connect your Telegram bot and go live in minutes.',
   keywords: [
-    'Openclaw', 'Deploy Openclaw', 'Host Openclaw', 'Openclaw online', 'Openclaw agent', 
-    'Telegram AI agent', 'Autonomous agent online', 'Openclaw hosting', 'LLM Telegram Bot', 'Bitslave'
+    'Host Openclaw', 'Deploy Openclaw', 'Openclaw cloud hosting', 'Openclaw online', 'Openclaw agent', 
+    'Telegram AI agent', 'Autonomous agent hosting', 'Openclaw easy setup', 'LLM Telegram Bot', 'Bitslave'
   ],
   authors: [{ name: 'Bitslave' }],
   creator: 'Bitslave',
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Deploy Openclaw Agents Online | Bitslave',
     description: 'Host your Openclaw autonomous AI agent in minutes. Connect your Telegram bot, provide API keys, and go live 24/7.',
-    url: 'https://bitslave.dev', // Assuming bitslave.dev, change if otherwise
+    url: 'https://bitslave.cloud', // Assuming bitslave.dev, change if otherwise
     siteName: 'Bitslave',
     images: [
       {
@@ -75,8 +75,28 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Bitslave",
+    "applicationCategory": "UtilityApplication",
+    "operatingSystem": "All",
+    "description": "The easiest platform to host and deploy your Openclaw autonomous AI agent online 24/7.",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  };
+
   return (
     <html lang="en" className="dark">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body className="font-sans antialiased bg-background text-foreground">
         <Providers>
           {children}
